@@ -1,0 +1,19 @@
+.loader-parent {
+  z-index: 99;
+  position: absolute;
+  inset: 0;
+  background-color: rgba(31, 31, 31, 0.675);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner-border {
+  height: 80px;
+  width: 80px;
+}
+
+.page-title h2 {
+  font-size: 25px;
+  text-transform: uppercase;
+}
