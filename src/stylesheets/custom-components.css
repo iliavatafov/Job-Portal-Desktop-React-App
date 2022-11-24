@@ -17,3 +17,8 @@
   font-size: 25px;
   text-transform: uppercase;
 }
+
+.underline {
+  text-decoration: underline;
+  cursor: pointer;
+}
