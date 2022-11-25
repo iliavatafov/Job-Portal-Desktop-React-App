@@ -8,6 +8,7 @@ import {
   orderBy,
   query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { fireDB } from "../../firebaseConfig";
 import moment from "moment";
@@ -125,6 +126,101 @@ export const deleteJobById = async (id) => {
     return {
       success: true,
       message: "Job delete successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Somthing went wrong",
+    };
+  }
+};
+
+export const applyJobPost = async (payload) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const job = payload;
+
+  try {
+    await addDoc(collection(fireDB, "applications"), {
+      ...job,
+      jobId: job.id,
+      jobTitle: job.title,
+      company: job.company,
+      userId: user.id,
+      userName: user.name,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      appliedOn: moment().format("DD-MM-YYYY HH:mm A"),
+    });
+    return {
+      success: true,
+      message: "Job applied successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Somthing went wrong",
+    };
+  }
+};
+
+export const getApplicationsByUserId = async (userId) => {
+  try {
+    const applications = [];
+    const qry = query(
+      collection(fireDB, "applications"),
+      where("userId", "==", userId)
+    );
+    const querySnapshot = await getDocs(qry);
+    querySnapshot.forEach((doc) => {
+      applications.push({ id: doc.id, ...doc.data() });
+    });
+    return {
+      success: true,
+      data: applications,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Somthing went wrong",
+    };
+  }
+};
+
+export const getApplicationsByJobId = async (jobId) => {
+  try {
+    const applications = [];
+    const qry = query(
+      collection(fireDB, "applications"),
+      where("jobId", "==", jobId)
+    );
+    const querySnapshot = await getDocs(qry);
+
+    querySnapshot.forEach((doc) => {
+      applications.push({ id: doc.id, ...doc.data() });
+    });
+    return {
+      success: true,
+      data: applications,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Somthing went wrong",
+    };
+  }
+};
+
+export const getAllApplications = async () => {
+  try {
+    const applications = [];
+    const qry = query(collection(fireDB, "applications"));
+    const querySnapshot = await getDocs(qry);
+    querySnapshot.forEach((doc) => {
+      applications.push({ id: doc.id, ...doc.data() });
+    });
+    return {
+      success: true,
+      data: applications,
     };
   } catch (error) {
     return {

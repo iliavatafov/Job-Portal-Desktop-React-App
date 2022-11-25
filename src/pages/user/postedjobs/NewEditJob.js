@@ -179,7 +179,7 @@ function NewEditJob() {
                 name="jobDescription"
                 rules={[{ required: true, message: "required" }]}
               >
-                <input type="textarea" />
+                <textarea type="text" />
               </Form.Item>
             </Col>
           </Row>
