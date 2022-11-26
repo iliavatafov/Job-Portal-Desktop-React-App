@@ -4,7 +4,12 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import PageTitle from "../components/PageTitle";
 import { HideLoading, ShowLoading } from "../redux/alertSlice";
-import { getApplicationsByJobId, getJobById } from "./apis/jobs";
+import {
+  applyJobPost,
+  editJobDetails,
+  getApplicationsByJobId,
+  getJobById,
+} from "./apis/jobs";
 
 function JobDescription() {
   const params = useParams();
@@ -12,39 +17,66 @@ function JobDescription() {
   const dispatch = useDispatch();
   const [jobData, setJobData] = useState(null);
   const [showApplyButton, setShowApplyButton] = useState(true);
+  const [alredyApllied, setAlreadyApplied] = useState(false);
+
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const getData = async () => {
     try {
       dispatch(ShowLoading());
       const response = await getJobById(params.id);
 
-      if (
-        response.data.posterByUserId ===
-        JSON.parse(localStorage.getItem("user")).id
-      ) {
+      if (response.data.posterByUserId === user.id) {
         setShowApplyButton(false);
       }
 
       const applicationsResponse = await getApplicationsByJobId(params.id);
 
       if (
-        applicationsResponse.data.filter(
-          (item) => item.userId === localStorage.getItem("user").id
-        ).length > 0
+        applicationsResponse.data.filter((item) => item.userId === user.id)
+          .length > 0
       ) {
         setShowApplyButton(false);
+        setAlreadyApplied(true);
       }
 
       dispatch(HideLoading());
 
       if (response.success) {
-        setJobData(response.data);
+        const isIdInResponseData = response.data.id;
+        if (isIdInResponseData === undefined) {
+          await editJobDetails({
+            ...response.data,
+            id: params.id,
+          });
+        }
+        setJobData({
+          ...response.data,
+          id: params.id,
+        });
       } else {
         message.error(response.message);
       }
     } catch (error) {
       dispatch(HideLoading());
       message.error(error.message);
+    }
+  };
+
+  const applyNow = async () => {
+    try {
+      dispatch(ShowLoading());
+      const response = await applyJobPost(jobData);
+      dispatch(HideLoading());
+      if (response.success) {
+        message.success(response.message);
+        navigate("/");
+      } else {
+        message.error(response.message);
+      }
+    } catch (error) {
+      message.error(error.message);
+      dispatch(HideLoading());
     }
   };
 
@@ -102,6 +134,16 @@ function JobDescription() {
             </div>
             <h5 className="underline uppercase my-3">Job Description</h5>
             <span className="pt-2">{jobData.jobDescription}</span>
+
+            {alredyApllied && (
+              <div className="already-applied">
+                <span>
+                  You already applied for this job. You can view your
+                  application status in the applied section
+                </span>
+              </div>
+            )}
+
             <div className="d-flex gap-2 mt-3 justify-content-end">
               <button
                 className="primary-outline-btn"
@@ -111,7 +153,9 @@ function JobDescription() {
               </button>
 
               {showApplyButton && (
-                <button className="primary-contained-btn">APPLY NOW</button>
+                <button className="primary-contained-btn" onClick={applyNow}>
+                  APPLY NOW
+                </button>
               )}
             </div>
           </Col>

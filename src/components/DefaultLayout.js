@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUserProfile } from "../pages/apis/users";
-import { useDispatch } from "react-redux";
+import { getUserNotifications, getUserProfile } from "../pages/apis/users";
+import { useDispatch, useSelector } from "react-redux";
 import { HideLoading, ShowLoading } from "../redux/alertSlice";
+import { SetReloadNotifications } from "../redux/notifications";
+import { Badge } from "antd";
 
 function DefaultLayout({ children }) {
   const user = JSON.parse(localStorage.getItem("user"));
+  const { reloadNotifications, unreadNotifications } = useSelector(
+    (state) => state.notifications
+  );
   const [collapsed, setCollapsed] = useState(false);
   const [manuToRender, setMenuToRender] = useState([]);
   const navigate = useNavigate();
@@ -32,9 +37,9 @@ function DefaultLayout({ children }) {
     },
     {
       title: "Profile",
-      onClick: () => navigate("/profile"),
+      onClick: () => navigate(`/profile/${user.id}`),
       icon: <i className="ri-user-2-line"></i>,
-      path: "/profile",
+      path: `/profile`,
     },
     {
       title: "Logout",
@@ -99,8 +104,25 @@ function DefaultLayout({ children }) {
     }
   };
 
+  const loadNotifications = async () => {
+    try {
+      dispatch(ShowLoading());
+      await getUserNotifications();
+      dispatch(HideLoading());
+      dispatch(SetReloadNotifications(false));
+    } catch (error) {
+      dispatch(HideLoading());
+    }
+  };
+
   useEffect(() => {
     getData();
+  }, []);
+
+  useEffect(() => {
+    if (reloadNotifications) {
+      loadNotifications();
+    }
   }, []);
 
   return (
@@ -141,8 +163,15 @@ function DefaultLayout({ children }) {
             <span className="logo">PERFECTJOBS</span>
           </div>
           <div className="d-flex gap-1 align-items-center">
-            <i className="ri-shield-user-fill"></i>
+            <Badge
+              className="mx-5"
+              count={unreadNotifications.length || 0}
+              onClick={() => navigate("/notifications")}
+            >
+              <i className="ri-notification-line"></i>
+            </Badge>
             <span>{user?.name}</span>
+            <i className="ri-shield-user-fill"></i>
           </div>
         </div>
         <div className="body">{children}</div>

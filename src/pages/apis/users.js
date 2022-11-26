@@ -6,6 +6,11 @@ import {
   collection,
 } from "firebase/firestore";
 import { fireDB } from "../../firebaseConfig";
+import {
+  SetReadNotifications,
+  SetUnreadNotifications,
+} from "../../redux/notifications";
+import store from "../../redux/store";
 
 export const updateUserProfile = async (payload) => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -64,6 +69,40 @@ export const getAllUsers = async () => {
     return {
       success: false,
       message: "Somthing went wrong",
+    };
+  }
+};
+
+export const getUserNotifications = async () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  try {
+    const notifiacions = [];
+    const querySnapshot = await getDocs(
+      collection(fireDB, "users", user.id, "notifications")
+    );
+    querySnapshot.forEach((doc) => {
+      notifiacions.push({ id: doc.id, ...doc.data() });
+    });
+
+    const readNotifications = notifiacions.filter(
+      (notification) => notification.status === "read"
+    );
+
+    const unreadNotifications = notifiacions.filter(
+      (notification) => notification.status === "unread"
+    );
+
+    store.dispatch(SetReadNotifications(readNotifications));
+    store.dispatch(SetUnreadNotifications(unreadNotifications));
+
+    return {
+      success: true,
+      data: notifiacions,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Somthing get wrong",
     };
   }
 };

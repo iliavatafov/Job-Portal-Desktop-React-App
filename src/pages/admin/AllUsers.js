@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import PageTitle from "../../components/PageTitle";
 import { useDispatch } from "react-redux";
 import { HideLoading, ShowLoading } from "../../redux/alertSlice";
-import { editJobDetails } from "../apis/jobs";
 import { message, Table } from "antd";
 import { getAllUsers, updateUserProfile } from "../apis/users";
 

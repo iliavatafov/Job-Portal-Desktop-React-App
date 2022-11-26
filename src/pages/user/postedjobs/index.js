@@ -3,11 +3,18 @@ import { useNavigate } from "react-router-dom";
 import PageTitle from "../../../components/PageTitle";
 import { useDispatch } from "react-redux";
 import { HideLoading, ShowLoading } from "../../../redux/alertSlice";
-import { getPostedJobsByUserId, deleteJobById } from "../../apis/jobs";
+import {
+  getPostedJobsByUserId,
+  deleteJobById,
+  getApplicationsByJobId,
+} from "../../apis/jobs";
 import { message, Table } from "antd";
+import AppliedCandidates from "./AppliedCandidates";
 
 function PostedJobs() {
   const [data, setData] = useState([]);
+  const [showAppliedCandidates, setShowAppliedCandidates] = useState(false);
+  const [appliedCandidates, setAppliedCandidates] = useState([]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -44,6 +51,24 @@ function PostedJobs() {
     }
   };
 
+  const getAppliedCadidates = async (id) => {
+    try {
+      dispatch(ShowLoading());
+      const response = await getApplicationsByJobId(id);
+      dispatch(HideLoading());
+      if (response.success) {
+        setAppliedCandidates(response.data);
+        if (!showAppliedCandidates) {
+          setShowAppliedCandidates(true);
+        }
+      }
+      dispatch(HideLoading());
+    } catch (error) {
+      dispatch(HideLoading());
+      message.error(error.message);
+    }
+  };
+
   const columns = [
     {
       title: "Title",
@@ -69,7 +94,13 @@ function PostedJobs() {
       title: "Action",
       dataIndex: "action",
       render: (text, record) => (
-        <div className="d-flex gap-2">
+        <div className="d-flex gap-3 align-items-center">
+          <span
+            className="underline"
+            onClick={() => getAppliedCadidates(record.id)}
+          >
+            candidates
+          </span>
           <i
             className="ri-delete-bin-line"
             onClick={() => deleteJob(record.id)}
@@ -99,6 +130,15 @@ function PostedJobs() {
         </button>
       </div>
       <Table columns={columns} dataSource={data} />
+
+      {showAppliedCandidates && (
+        <AppliedCandidates
+          showAppliedCandidates={showAppliedCandidates}
+          setShowAppliedCandidates={setShowAppliedCandidates}
+          appliedCandidates={appliedCandidates}
+          reloadData={getAppliedCadidates}
+        />
+      )}
     </div>
   );
 }
