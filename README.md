@@ -1,6 +1,6 @@
 <h1 align="center"><i>PERFECTJOBS-LITE</i></h1>
 
-**_<p align="center">Perfectjobs-lite is a job portl application. It was developed during a course in the Udemy platform. The project was built with React, ANTD and Firebase.</p>_**
+**_<p align="center">Perfectjobs-lite is a job portl application. It was developed during a course in Udemy. The project was built with React, ANTD and Firebase.</p>_**
 
 <hr />
 
