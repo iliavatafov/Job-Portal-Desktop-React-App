@@ -31,7 +31,7 @@
 
   <hr />
   
-  __Features of the platform (as is, probably won't be updated anymore.)__
+  __Features of the application__
   
    <hr />
 
