@@ -6,22 +6,22 @@
 
 <p align="center">
   <a href="https://perfectjobs-lite.netlify.app/">
-    <img src="./home.png" />
+    <img src="./imgs/home.png" />
     <hr />
     <img src="./imgs/admin-view.png" />
     <hr />
-    <img src="./applied-jobs.png" />
+    <img src="./imgs/applied-jobs.png" />
     <hr />
-    <img src="./user-profile.png" />
-    <hr />
-    <hr />
-    <img src="./posted-jobs.png" />
+    <img src="./imgs/user-profile.png" />
     <hr />
     <hr />
-    <img src="./notifications.png" />
+    <img src="./imgs/posted-jobs.png" />
     <hr />
     <hr />
-    <img src="./login.png" />
+    <img src="./imgs/notifications.png" />
+    <hr />
+    <hr />
+    <img src="./imgs/login.png" />
     <hr />
 
   </a>
