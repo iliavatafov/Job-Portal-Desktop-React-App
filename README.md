@@ -1,4 +1,4 @@
-<h1 align="center"><i>PERFECTJOBS-LITE/</i></h1>
+<h1 align="center"><i>PERFECTJOBS-LITE</i></h1>
 
 **_<p align="center">Perfectjobs-lite is a job portl react application.</p>_**
 
