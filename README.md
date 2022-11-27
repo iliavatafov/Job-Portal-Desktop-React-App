@@ -22,6 +22,17 @@
     <hr />
   </a>
 <p>
+    <hr />
+  
+  __Certificates__
+  
+   <hr />
+   <p align="center">
+  <a href="https://perfectjobs-lite.netlify.app/">
+    <img src="./imgs/certificate.png" />
+    <hr />
+  </a>
+<p>
   <hr />
   
   __Features of the application__
