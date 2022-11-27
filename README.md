@@ -35,7 +35,7 @@
 <p>
   <hr />
   
-  __Features of the application__
+  __Features__
   
    <hr />
 
