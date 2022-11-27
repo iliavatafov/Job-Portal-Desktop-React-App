@@ -2,12 +2,17 @@ import { Col, message, Row } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import PageTitle from "../components/PageTitle";
+import Filters from "../components/Filters";
 import { HideLoading, ShowLoading } from "../redux/alertSlice";
 import { getAllJobs } from "./apis/jobs";
 
 function Home() {
   const [data, setData] = useState([]);
+  const [filters, setFilters] = useState({
+    location: "",
+    industry: "",
+    expeience: "",
+  });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -18,7 +23,10 @@ function Home() {
       const response = await getAllJobs();
       dispatch(HideLoading());
       if (response.success) {
-        setData(response.data);
+        const approvedJobs = response.data.filter(
+          (job) => job.status === "approved"
+        );
+        setData(approvedJobs);
       }
       dispatch(HideLoading());
     } catch (error) {
@@ -33,7 +41,7 @@ function Home() {
 
   return (
     <div>
-      <PageTitle title="Welcome to PerfectJobs" />
+      <Filters filters={filters} setFilters={setFilters} setData={setData} />
 
       <Row gutter={[15, 15]} className="mt-3">
         {data.map((job, i) => {

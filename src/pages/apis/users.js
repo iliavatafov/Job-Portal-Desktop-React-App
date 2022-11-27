@@ -4,6 +4,8 @@ import {
   getDoc,
   getDocs,
   collection,
+  query,
+  onSnapshot,
 } from "firebase/firestore";
 import { fireDB } from "../../firebaseConfig";
 import {
@@ -76,33 +78,51 @@ export const getAllUsers = async () => {
 export const getUserNotifications = async () => {
   const user = JSON.parse(localStorage.getItem("user"));
   try {
-    const notifiacions = [];
-    const querySnapshot = await getDocs(
-      collection(fireDB, "users", user.id, "notifications")
-    );
-    querySnapshot.forEach((doc) => {
-      notifiacions.push({ id: doc.id, ...doc.data() });
+    const q = query(collection(fireDB, "users", user.id, "notifications"));
+    onSnapshot(q, (querySnapshot) => {
+      const notifiacions = [];
+      querySnapshot.forEach((doc) => {
+        notifiacions.push({ id: doc.id, ...doc.data() });
+      });
+
+      const readNotifications = notifiacions.filter(
+        (notification) => notification.status === "read"
+      );
+
+      const unreadNotifications = notifiacions.filter(
+        (notification) => notification.status === "unread"
+      );
+
+      store.dispatch(SetReadNotifications(readNotifications));
+      store.dispatch(SetUnreadNotifications(unreadNotifications));
     });
-
-    const readNotifications = notifiacions.filter(
-      (notification) => notification.status === "read"
-    );
-
-    const unreadNotifications = notifiacions.filter(
-      (notification) => notification.status === "unread"
-    );
-
-    store.dispatch(SetReadNotifications(readNotifications));
-    store.dispatch(SetUnreadNotifications(unreadNotifications));
 
     return {
       success: true,
-      data: notifiacions,
     };
   } catch (error) {
     return {
       success: false,
       message: "Somthing get wrong",
+    };
+  }
+};
+
+export const changeNotificationStatus = async (id, status) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  try {
+    await updateDoc(doc(fireDB, "users", user.id, "notifications", id), {
+      status,
+    });
+    return {
+      success: true,
+      message: "Notification status changed",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Somthing went wrong ",
     };
   }
 };

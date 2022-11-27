@@ -60,12 +60,6 @@ function DefaultLayout({ children }) {
       path: "/",
     },
     {
-      title: "Application",
-      onClick: () => navigate("/admin/applications"),
-      icon: <i className="ri-file-list-3-line"></i>,
-      path: "/admin/applications",
-    },
-    {
       title: "Jobs",
       onClick: () => navigate("/admin/jobs"),
       icon: <i className="ri-file-list-2-line"></i>,
@@ -123,7 +117,7 @@ function DefaultLayout({ children }) {
     if (reloadNotifications) {
       loadNotifications();
     }
-  }, []);
+  }, [reloadNotifications]);
 
   return (
     <div className="layout">

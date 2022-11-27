@@ -1,6 +1,10 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PageTitle from "../components/PageTitle";
-import { Tabs, Alert } from "antd";
+import { Tabs, Alert, message } from "antd";
+import { HideLoading, ShowLoading } from "../redux/alertSlice";
+import { changeNotificationStatus } from "./apis/users";
+import { SetReloadNotifications } from "../redux/notifications";
+import { useNavigate } from "react-router-dom";
 
 const TabPane = Tabs.TabPane;
 
@@ -8,6 +12,22 @@ function Notifications() {
   const { readNotifications, unreadNotifications } = useSelector(
     (state) => state.notifications
   );
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const changeStatus = async (id, status) => {
+    try {
+      dispatch(ShowLoading());
+      const response = await changeNotificationStatus(id, status);
+      if (response.success) {
+        dispatch(SetReloadNotifications(true));
+        message.success(response.message);
+      }
+      dispatch(HideLoading());
+    } catch (error) {
+      dispatch(HideLoading());
+    }
+  };
 
   return (
     <div>
@@ -21,11 +41,19 @@ function Notifications() {
                 key={index}
                 message={
                   <div className="d-flex justify-content-between align-items-center">
-                    <div className="d-flex flex-column">
+                    <div
+                      className="d-flex flex-column"
+                      onClick={() => navigate("/applied-jobs")}
+                    >
                       <span>{notification.title}</span>
                       <span>{notification.createdAt}</span>
                     </div>
-                    <span className="underline">Mark as read</span>
+                    <span
+                      className="underline"
+                      onClick={() => changeStatus(notification.id, "read")}
+                    >
+                      Mark as read
+                    </span>
                   </div>
                 }
               />
@@ -39,11 +67,19 @@ function Notifications() {
                 key={index}
                 message={
                   <div className="d-flex justify-content-between align-items-center">
-                    <div className="d-flex flex-column">
+                    <div
+                      className="d-flex flex-column"
+                      onClick={() => navigate("/applied-jobs")}
+                    >
                       <span>{notification.title}</span>
                       <span>{notification.createdAt}</span>
                     </div>
-                    <span className="underline">Mark as unread</span>
+                    <span
+                      className="underline"
+                      onClick={() => changeStatus(notification.id, "unread")}
+                    >
+                      Mark as unread
+                    </span>
                   </div>
                 }
               />

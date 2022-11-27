@@ -24,6 +24,15 @@ export const addNewJobPost = async (payload) => {
       posterByUserName: user.name,
       posterOn: moment().format("DD-MM-YYYY HH:mm A"),
     });
+
+    //send notification to admin
+
+    await addDoc(collection(fireDB, "users", "admin", "notifications"), {
+      title: `New Job Post Request from ${user.name}`,
+      onClick: "/admin/jobs",
+      postedOn: moment().format("DD-MM-YYYY HH:mm A"),
+      status: "unread",
+    });
     return {
       success: true,
       message: "Job posted successfully",
@@ -82,17 +91,34 @@ export const getJobById = async (id) => {
   }
 };
 
-export const getAllJobs = async () => {
+export const getAllJobs = async (filters) => {
   try {
+    let whereConditions = [];
+
+    if (filters) {
+      Object.keys(filters).forEach((key) => {
+        if (filters[key]) {
+          whereConditions.push(where(key, "==", filters[key]));
+        }
+      });
+    }
+
     const jobs = [];
-    const qry = query(collection(fireDB, "jobs"), orderBy("posterOn", "desc"));
+    const qry = query(collection(fireDB, "jobs"), ...whereConditions);
     const querySnapshot = await getDocs(qry);
     querySnapshot.forEach((doc) => {
       jobs.push({ id: doc.id, ...doc.data() });
     });
+
+    const sortedPosts = jobs.sort((a, b) => {
+      return moment(b.postedOn, "DD-MM-YYYY HH:mm A").diff(
+        moment(a.postedOn, "DD-MM-YYYY HH:mm A")
+      );
+    });
+
     return {
       success: true,
-      data: jobs,
+      data: sortedPosts,
     };
   } catch (error) {
     return {
@@ -108,6 +134,37 @@ export const editJobDetails = async (payload) => {
       ...payload,
       updatedOn: moment().format("DD-MM-YYYY HH:mm A"),
     });
+    return {
+      success: true,
+      message: "Jub updated successfylly",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Somthing went wrong",
+    };
+  }
+};
+
+export const changeJobStatusFromAdmin = async (payload) => {
+  try {
+    await updateDoc(doc(fireDB, "jobs", payload.id), {
+      ...payload,
+      updatedOn: moment().format("DD-MM-YYYY HH:mm A"),
+    });
+
+    //send notification to user
+
+    await addDoc(
+      collection(fireDB, "users", payload.posterByUserId, "notifications"),
+      {
+        title: `Your job post request for ${payload.title} has been ${payload.status}`,
+        onClick: `/posted-jobs`,
+        createdAt: moment().format("DD-MM-YYYY HH:mm A"),
+        status: "unread",
+      }
+    );
+
     return {
       success: true,
       message: "Jub updated successfylly",

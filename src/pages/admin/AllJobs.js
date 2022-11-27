@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import PageTitle from "../../components/PageTitle";
 import { useDispatch } from "react-redux";
 import { HideLoading, ShowLoading } from "../../redux/alertSlice";
-import { deleteJobById, editJobDetails } from "../apis/jobs";
+import {
+  changeJobStatusFromAdmin,
+  deleteJobById,
+  editJobDetails,
+} from "../apis/jobs";
 import { message, Table } from "antd";
 import { getAllJobs } from "../apis/jobs";
 
@@ -44,11 +48,14 @@ function AllJobs() {
     }
   };
 
-  const changeStatus = async (id, status) => {
+  const changeStatus = async (jobData, status) => {
     try {
       dispatch(ShowLoading());
 
-      const response = await editJobDetails({ id, status });
+      const response = await changeJobStatusFromAdmin({
+        ...jobData,
+        status,
+      });
       if (response.success) {
         setData(response.data);
         getData();
@@ -93,7 +100,7 @@ function AllJobs() {
           {record.status === "approved" && (
             <span
               className="underline"
-              onClick={() => changeStatus(record.id, "rejected")}
+              onClick={() => changeStatus(record, "rejected")}
             >
               Reject
             </span>
@@ -101,7 +108,7 @@ function AllJobs() {
           {(record.status === "pending" || record.status === "rejected") && (
             <span
               className="underline"
-              onClick={() => changeStatus(record.id, "approved")}
+              onClick={() => changeStatus(record, "approved")}
             >
               Approve
             </span>
