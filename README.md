@@ -1,6 +1,6 @@
 <h1 align="center"><i>PERFECTJOBS-LITE</i></h1>
 
-**_<p align="center">Perfectjobs-lite is a job portl react application.</p>_**
+**_<p align="center">Perfectjobs-lite is a job portl application. It was developed during a course in the Udemy platform. The project was built with React, ANTD and Firebase.</p>_**
 
 <hr />
 
@@ -14,21 +14,14 @@
     <hr />
     <img src="./imgs/user-profile.png" />
     <hr />
-    <hr />
     <img src="./imgs/posted-jobs.png" />
-    <hr />
     <hr />
     <img src="./imgs/notifications.png" />
     <hr />
-    <hr />
     <img src="./imgs/login.png" />
     <hr />
-
   </a>
 <p>
-
-
-
   <hr />
   
   __Features of the application__
