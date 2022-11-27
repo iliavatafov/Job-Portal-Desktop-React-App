@@ -8,7 +8,7 @@
   <a href="https://perfectjobs-lite.netlify.app/">
     <img src="./home.png" />
     <hr />
-    <img src="./admin-view.png" />
+    <img src="./imgs/admin-view.png" />
     <hr />
     <img src="./applied-jobs.png" />
     <hr />
