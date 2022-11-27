@@ -28,7 +28,7 @@
   
    <hr />
    <p align="center">
-  <a href="https://perfectjobs-lite.netlify.app/](https://www.udemy.com/certificate/UC-5b6094fc-2177-4cd2-aaeb-6c996791d48e/">
+  <a href="https://udemy-certificate.s3.amazonaws.com/image/UC-5b6094fc-2177-4cd2-aaeb-6c996791d48e.jpg?v=1669569109000">
     <img src="./imgs/certificate.png" />
     <hr />
   </a>
