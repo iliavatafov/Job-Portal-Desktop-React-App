@@ -56,6 +56,4 @@
 
   <hr />
 
-  The repo includes the "<i>front-end</i>" of the app.
-
 <h2>Hosted at <a href="https://perfectjobs-lite.netlify.app/" />https://perfectjobs-lite.netlify.app/</h2>
