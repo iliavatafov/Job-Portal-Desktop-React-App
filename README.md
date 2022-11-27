@@ -30,6 +30,10 @@
 
 
   <hr />
+  
+  __Features of the platform (as is, probably won't be updated anymore.)__
+  
+   <hr />
 
   - <i><b>Home page</b></i>
   - <i><b>Auth (Register, Login)</b></i>
