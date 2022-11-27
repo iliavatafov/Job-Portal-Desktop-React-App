@@ -42,7 +42,6 @@
   - <i><b>Home page</b></i>
   - <i><b>Auth (Register, Login)</b></i>
   - <i><b>Type of users (Admin and Standard user)</b></i>
-  - <i><b>-</b></i>
   - <i><b>Update user profile</b></i>
   - <i><b>Create job post (user only)</b></i>
   - <i><b>Update job post (owner only)</b></i>
