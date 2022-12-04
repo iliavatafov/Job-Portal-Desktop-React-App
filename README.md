@@ -59,7 +59,7 @@
 
 <hr/>
 
-<h3>Admin credentials</>
+<h3>Admin credentials</h3>
 
 <br/>
 
