@@ -60,5 +60,8 @@
 <hr/>
 
 <h3>Admin credentials</>
+
+<br/>
+
 <p>username: admin@abv.bg</p>
 <p>password: 123456</p>
