@@ -57,6 +57,8 @@
 
 <h2>Hosted at <a href="https://perfectjobs-lite.netlify.app/" />https://perfectjobs-lite.netlify.app/</h2>
 
-<h3>Admin credentials<\>
-<p>username: admin@abv.bg<\p>
-<p>password: 123456<\p>
+<hr</>
+
+<h3>Admin credentials</>
+<p>username: admin@abv.bg</p>
+<p>password: 123456</p>
